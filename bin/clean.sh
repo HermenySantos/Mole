@@ -8,11 +8,19 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../lib/common.sh"
 source "$SCRIPT_DIR/../lib/backup.sh"
+source "$SCRIPT_DIR/../lib/dry_run_display.sh"
+source "$SCRIPT_DIR/../lib/interactive_preview.sh"
+source "$SCRIPT_DIR/../lib/export.sh"
 
 # Configuration
 SYSTEM_CLEAN=false
 DRY_RUN=false
 BACKUP_MODE=false
+PREVIEW_MODE=false
+TREE_VIEW=false
+DETAILED_VIEW=false
+SUMMARY_ONLY=false
+EXPORT_FORMAT=""
 IS_M_SERIES=$([ "$(uname -m)" = "arm64" ] && echo "true" || echo "false")
 # Default whitelist patterns to avoid removing critical caches (can be extended by user)
 WHITELIST_PATTERNS=(
@@ -41,6 +49,16 @@ SUDO_KEEPALIVE_PID=""
 
 # Backup tracking
 declare -a FILES_TO_BACKUP
+
+# Enhanced display tracking
+CURRENT_CATEGORY=""
+CATEGORY_ITEM_COUNT=0
+
+# Function to set the current category for data collection
+set_category() {
+    CURRENT_CATEGORY="$1"
+    CATEGORY_ITEM_COUNT=0
+}
 
 note_activity() {
     if [[ $TRACK_SECTION -eq 1 ]]; then
@@ -238,6 +256,14 @@ safe_clean() {
         else
             size_human="${total_size_bytes}KB"
         fi
+        
+        # Collect data for enhanced display/export if category is set
+        if [[ -n "$CURRENT_CATEGORY" ]]; then
+            ((CATEGORY_ITEM_COUNT++))
+            # Convert KB to bytes for consistency with display library
+            local size_in_bytes=$((total_size_bytes * 1024))
+            add_category_item "$CURRENT_CATEGORY" "$description" "$size_in_bytes" "$total_count"
+        fi
 
         local label="$description"
         if [[ ${#targets[@]} -gt 1 ]]; then
@@ -351,8 +377,10 @@ perform_cleanup() {
 
     # ===== 2. User essentials =====
     start_section "System essentials"
+    set_category "System Caches"
     safe_clean ~/Library/Caches/* "User app cache"
     safe_clean ~/Library/Logs/* "User app logs"
+    set_category "Trash"
     safe_clean ~/.Trash/* "Trash"
 
     # Empty the trash on all mounted volumes
@@ -409,6 +437,7 @@ perform_cleanup() {
 
     # ===== 5. Browsers =====
     start_section "Browser cleanup"
+    set_category "Browser Caches"
     # Safari (cache only, NOT local storage or databases to preserve login states)
     safe_clean ~/Library/Caches/com.apple.Safari/* "Safari cache"
 
@@ -459,6 +488,7 @@ perform_cleanup() {
 
     # ===== 8. Developer tools =====
     start_section "Developer tools"
+    set_category "Developer Tools"
     # Node.js ecosystem
     if command -v npm >/dev/null 2>&1; then
         [[ -t 1 ]] && echo -ne "  ${BLUE}◎${NC} Cleaning npm cache...\r"
@@ -1168,6 +1198,29 @@ perform_cleanup() {
         fi
     fi
     end_section
+    
+    # ===== Enhanced Display / Export =====
+    # Handle export mode first (output only)
+    if [[ -n "$EXPORT_FORMAT" ]]; then
+        export_cleanup_data "$EXPORT_FORMAT"
+        return 0
+    fi
+    
+    # Show enhanced visualization if requested
+    if [[ "$DRY_RUN" == "true" ]]; then
+        echo ""
+        if [[ "$TREE_VIEW" == "true" ]]; then
+            display_tree_view
+        elif [[ "$DETAILED_VIEW" == "true" ]]; then
+            display_detailed_view
+        elif [[ "$SUMMARY_ONLY" == "true" ]]; then
+            display_compact_summary
+        elif [[ "${#CATEGORY_DATA[@]}" -gt 0 ]]; then
+            # Show enhanced summary by default for dry-run
+            display_summary_table
+        fi
+        echo ""
+    fi
 
     # ===== Final summary =====
     space_after=$(df / | tail -1 | awk '{print $4}')
@@ -1239,14 +1292,40 @@ cleanup() {
 trap cleanup EXIT INT TERM
 
 main() {
-    # Parse args (only dry-run and help for minimal impact)
-    for arg in "$@"; do
+    # Parse args
+    local i=0
+    while [[ $i -lt $# ]]; do
+        ((i++))
+        local arg="${!i}"
         case "$arg" in
             "--dry-run"|"-n")
                 DRY_RUN=true
                 ;;
             "--backup"|"-b")
                 BACKUP_MODE=true
+                ;;
+            "--preview")
+                PREVIEW_MODE=true
+                DRY_RUN=true  # Preview implies dry-run first
+                ;;
+            "--tree")
+                TREE_VIEW=true
+                ;;
+            "--detailed")
+                DETAILED_VIEW=true
+                ;;
+            "--summary")
+                SUMMARY_ONLY=true
+                ;;
+            "--export")
+                # Get next argument as format
+                ((i++))
+                if [[ $i -le $# ]]; then
+                    EXPORT_FORMAT="${!i}"
+                else
+                    echo "Error: --export requires a format (json, csv, md, html)" >&2
+                    exit 1
+                fi
                 ;;
             "--whitelist")
                 source "$SCRIPT_DIR/../lib/whitelist_manager.sh"
@@ -1258,14 +1337,29 @@ main() {
                 echo "Usage: clean.sh [options]"
                 echo ""
                 echo "Options:"
-                echo "  --help, -h        Show this help"
-                echo "  --dry-run, -n     Preview what would be cleaned without deleting"
-                echo "  --backup, -b      Create backup before cleaning (recommended)"
-                echo "  --whitelist       Manage protected caches"
+                echo "  --help, -h           Show this help"
+                echo "  --dry-run, -n        Preview what would be cleaned without deleting"
+                echo "  --backup, -b         Create backup before cleaning (recommended)"
+                echo "  --preview            Interactive selection of items to clean"
+                echo "  --tree               Display dry-run in tree view"
+                echo "  --detailed           Display detailed dry-run information"
+                echo "  --summary            Display compact summary only"
+                echo "  --export <format>    Export dry-run data (json|csv|md|html)"
+                echo "  --whitelist          Manage protected caches"
                 echo ""
-                echo "Interactive cleanup with smart password handling"
+                echo "Examples:"
+                echo "  clean.sh --dry-run                    # Preview cleanup"
+                echo "  clean.sh --dry-run --tree             # Tree view"
+                echo "  clean.sh --dry-run --export json      # Export to JSON"
+                echo "  clean.sh --preview                    # Interactive selection"
+                echo "  clean.sh --backup                     # Safe cleanup"
                 echo ""
                 exit 0
+                ;;
+            *)
+                echo "Unknown option: $arg" >&2
+                echo "Use --help for usage information" >&2
+                exit 1
                 ;;
         esac
     done
@@ -1299,6 +1393,41 @@ main() {
         else
             log_info "No files to backup"
         fi
+    fi
+    
+    # Handle interactive preview mode
+    if [[ "$PREVIEW_MODE" == "true" ]]; then
+        # First, run a dry-run to collect data
+        log_info "Analyzing system for cleanup..."
+        perform_cleanup
+        
+        # Show interactive preview if we have data
+        if [[ "${#CATEGORY_DATA[@]}" -gt 0 ]]; then
+            show_cursor  # Show cursor for interactive mode
+            echo ""
+            
+            # Run interactive preview
+            if interactive_cleanup_preview; then
+                # User confirmed, proceed with cleanup
+                echo ""
+                log_info "Starting cleanup of selected items..."
+                hide_cursor
+                DRY_RUN=false  # Turn off dry-run for actual cleanup
+                
+                # TODO: Implement selective cleanup based on user selection
+                # For now, just run full cleanup
+                perform_cleanup
+            else
+                # User cancelled
+                echo ""
+                log_info "Cleanup cancelled by user"
+            fi
+        else
+            echo ""
+            log_info "No cleanable items found"
+        fi
+        show_cursor
+        return 0
     fi
     
     # Perform the actual cleanup

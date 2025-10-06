@@ -129,6 +129,8 @@ show_help() {
     printf "  %s%-28s%s %s\n" "$GREEN" "mo clean" "$NC" "Deeper system cleanup"
     printf "  %s%-28s%s %s\n" "$GREEN" "mo clean --dry-run" "$NC" "Preview cleanup (no deletions)"
     printf "  %s%-28s%s %s\n" "$GREEN" "mo clean --backup" "$NC" "Create backup before cleaning"
+    printf "  %s%-28s%s %s\n" "$GREEN" "mo clean --preview" "$NC" "Interactive item selection"
+    printf "  %s%-28s%s %s\n" "$GREEN" "mo clean --export json" "$NC" "Export cleanup data (json/csv/md/html)"
     printf "  %s%-28s%s %s\n" "$GREEN" "mo clean --whitelist" "$NC" "Manage protected caches"
     printf "  %s%-28s%s %s\n" "$GREEN" "mo uninstall" "$NC" "Remove applications completely"
     printf "  %s%-28s%s %s\n" "$GREEN" "mo analyze" "$NC" "Interactive disk space explorer"

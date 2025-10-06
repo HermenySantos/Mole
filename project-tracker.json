@@ -119,27 +119,30 @@
           "name": "Enhanced Dry-Run Output",
           "effort_days": 1.5,
           "priority": "P1",
-          "status": "todo",
+          "status": "done",
           "assignee": "Dev",
-          "dependencies": []
+          "dependencies": [],
+          "completed_date": "2025-10-06"
         },
         {
           "id": "2.2",
           "name": "Interactive Preview Mode",
           "effort_days": 1.5,
           "priority": "P1",
-          "status": "todo",
+          "status": "done",
           "assignee": "Dev",
-          "dependencies": ["2.1"]
+          "dependencies": ["2.1"],
+          "completed_date": "2025-10-06"
         },
         {
           "id": "2.3",
           "name": "JSON/CSV Export",
           "effort_days": 0.5,
           "priority": "P2",
-          "status": "todo",
+          "status": "done",
           "assignee": "Dev",
-          "dependencies": []
+          "dependencies": [],
+          "completed_date": "2025-10-06"
         },
         {
           "id": "3.1",

@@ -1,0 +1,762 @@
+{
+  "project": {
+    "name": "Mole Enhancement",
+    "version": "2.0.0 → 2.3.0",
+    "start_date": "2025-10-06",
+    "duration_weeks": 16,
+    "owner": "Hermenegildo Santos",
+    "repository": "https://github.com/hermenegildosantos/Mole"
+  },
+  "milestones": [
+    {
+      "id": "m1",
+      "version": "v2.0.0",
+      "name": "Safety & Trust",
+      "target_week": 3,
+      "status": "not_started",
+      "priority": "P0",
+      "deliverables": [
+        "Backup/restore system",
+        "Enhanced dry-run visualization",
+        "Interactive preview mode",
+        "Comprehensive tests",
+        "Updated documentation"
+      ]
+    },
+    {
+      "id": "m2",
+      "version": "v2.1.0",
+      "name": "Automation & Intelligence",
+      "target_week": 7,
+      "status": "not_started",
+      "priority": "P0",
+      "deliverables": [
+        "Smart scheduling system",
+        "Fixed schedule modes",
+        "Pattern learning",
+        "Analytics engine",
+        "Insights CLI"
+      ]
+    },
+    {
+      "id": "m3",
+      "version": "v2.2.0",
+      "name": "Accessibility & Experience",
+      "target_week": 11,
+      "status": "not_started",
+      "priority": "P1",
+      "deliverables": [
+        "Web dashboard",
+        "Interactive tutorial",
+        "Profile system",
+        "Notification system"
+      ]
+    },
+    {
+      "id": "m4",
+      "version": "v2.3.0",
+      "name": "Advanced Features",
+      "target_week": 16,
+      "status": "not_started",
+      "priority": "P2",
+      "deliverables": [
+        "Plugin system",
+        "Cloud backup",
+        "Performance optimizations",
+        "Security hardening"
+      ]
+    }
+  ],
+  "phases": [
+    {
+      "id": "phase1",
+      "name": "Safety & Trust",
+      "weeks": "1-3",
+      "milestone": "v2.0.0",
+      "tasks": [
+        {
+          "id": "1.1",
+          "name": "Design Backup Architecture",
+          "effort_days": 0.5,
+          "priority": "P0",
+          "status": "done",
+          "assignee": "Lead Dev",
+          "dependencies": [],
+          "completed_date": "2025-10-06"
+        },
+        {
+          "id": "1.2",
+          "name": "Implement Backup Creation",
+          "effort_days": 2,
+          "priority": "P0",
+          "status": "done",
+          "assignee": "Dev",
+          "dependencies": ["1.1"],
+          "completed_date": "2025-10-06"
+        },
+        {
+          "id": "1.3",
+          "name": "Implement Restore Functionality",
+          "effort_days": 2,
+          "priority": "P0",
+          "status": "done",
+          "assignee": "Dev",
+          "dependencies": ["1.2"],
+          "completed_date": "2025-10-06"
+        },
+        {
+          "id": "1.4",
+          "name": "Backup Auto-Cleanup",
+          "effort_days": 0.5,
+          "priority": "P1",
+          "status": "done",
+          "assignee": "Dev",
+          "dependencies": ["1.3"],
+          "completed_date": "2025-10-06"
+        },
+        {
+          "id": "2.1",
+          "name": "Enhanced Dry-Run Output",
+          "effort_days": 1.5,
+          "priority": "P1",
+          "status": "todo",
+          "assignee": "Dev",
+          "dependencies": []
+        },
+        {
+          "id": "2.2",
+          "name": "Interactive Preview Mode",
+          "effort_days": 1.5,
+          "priority": "P1",
+          "status": "todo",
+          "assignee": "Dev",
+          "dependencies": ["2.1"]
+        },
+        {
+          "id": "2.3",
+          "name": "JSON/CSV Export",
+          "effort_days": 0.5,
+          "priority": "P2",
+          "status": "todo",
+          "assignee": "Dev",
+          "dependencies": []
+        },
+        {
+          "id": "3.1",
+          "name": "Comprehensive Testing",
+          "effort_days": 2,
+          "priority": "P0",
+          "status": "todo",
+          "assignee": "QA/Dev",
+          "dependencies": ["1.4", "2.2", "2.3"]
+        },
+        {
+          "id": "3.2",
+          "name": "Documentation Updates",
+          "effort_days": 1,
+          "priority": "P1",
+          "status": "todo",
+          "assignee": "Dev/Tech Writer",
+          "dependencies": ["3.1"]
+        },
+        {
+          "id": "3.3",
+          "name": "Beta Testing Preparation",
+          "effort_days": 0.5,
+          "priority": "P1",
+          "status": "todo",
+          "assignee": "Lead",
+          "dependencies": ["3.2"]
+        }
+      ]
+    },
+    {
+      "id": "phase2",
+      "name": "Automation & Intelligence",
+      "weeks": "4-7",
+      "milestone": "v2.1.0",
+      "tasks": [
+        {
+          "id": "4.1",
+          "name": "LaunchAgent Setup",
+          "effort_days": 2,
+          "priority": "P0",
+          "status": "todo",
+          "assignee": "Dev",
+          "dependencies": []
+        },
+        {
+          "id": "4.2",
+          "name": "Fixed Schedule Modes",
+          "effort_days": 1.5,
+          "priority": "P0",
+          "status": "todo",
+          "assignee": "Dev",
+          "dependencies": ["4.1"]
+        },
+        {
+          "id": "4.3",
+          "name": "Pre/Post Cleanup Notifications",
+          "effort_days": 1,
+          "priority": "P1",
+          "status": "todo",
+          "assignee": "Dev",
+          "dependencies": ["4.2"]
+        },
+        {
+          "id": "5.1",
+          "name": "Usage Pattern Learning",
+          "effort_days": 3,
+          "priority": "P0",
+          "status": "todo",
+          "assignee": "Dev",
+          "dependencies": []
+        },
+        {
+          "id": "5.2",
+          "name": "Smart Scheduling Decision Engine",
+          "effort_days": 2,
+          "priority": "P0",
+          "status": "todo",
+          "assignee": "Dev",
+          "dependencies": ["5.1"]
+        },
+        {
+          "id": "5.3",
+          "name": "Smart Mode Testing",
+          "effort_days": 1,
+          "priority": "P1",
+          "status": "todo",
+          "assignee": "QA",
+          "dependencies": ["5.2"]
+        },
+        {
+          "id": "6.1",
+          "name": "Analytics Database Setup",
+          "effort_days": 1.5,
+          "priority": "P1",
+          "status": "todo",
+          "assignee": "Dev",
+          "dependencies": []
+        },
+        {
+          "id": "6.2",
+          "name": "Analytics Calculation Engine",
+          "effort_days": 2,
+          "priority": "P1",
+          "status": "todo",
+          "assignee": "Dev",
+          "dependencies": ["6.1"]
+        },
+        {
+          "id": "6.3",
+          "name": "Analytics CLI Interface",
+          "effort_days": 2,
+          "priority": "P1",
+          "status": "todo",
+          "assignee": "Dev",
+          "dependencies": ["6.2"]
+        },
+        {
+          "id": "6.4",
+          "name": "Analytics Testing & Documentation",
+          "effort_days": 1.5,
+          "priority": "P1",
+          "status": "todo",
+          "assignee": "QA/Dev",
+          "dependencies": ["6.3"]
+        }
+      ]
+    },
+    {
+      "id": "phase3",
+      "name": "Accessibility & Experience",
+      "weeks": "8-11",
+      "milestone": "v2.2.0",
+      "tasks": [
+        {
+          "id": "7.1",
+          "name": "Web Server Setup",
+          "effort_days": 2,
+          "priority": "P2",
+          "status": "todo",
+          "assignee": "Full Stack Dev",
+          "dependencies": []
+        },
+        {
+          "id": "7.2",
+          "name": "Dashboard UI - Home Page",
+          "effort_days": 2,
+          "priority": "P2",
+          "status": "todo",
+          "assignee": "Frontend Dev",
+          "dependencies": ["7.1"]
+        },
+        {
+          "id": "7.3",
+          "name": "Dashboard UI - Cleanup Page",
+          "effort_days": 2,
+          "priority": "P2",
+          "status": "todo",
+          "assignee": "Frontend Dev",
+          "dependencies": ["7.2"]
+        },
+        {
+          "id": "7.4",
+          "name": "Dashboard UI - Analytics Page",
+          "effort_days": 1.5,
+          "priority": "P2",
+          "status": "todo",
+          "assignee": "Frontend Dev",
+          "dependencies": ["7.2"]
+        },
+        {
+          "id": "7.5",
+          "name": "Dashboard API Endpoints",
+          "effort_days": 2,
+          "priority": "P2",
+          "status": "todo",
+          "assignee": "Backend Dev",
+          "dependencies": ["7.1"]
+        },
+        {
+          "id": "7.6",
+          "name": "Dashboard Testing",
+          "effort_days": 1.5,
+          "priority": "P2",
+          "status": "todo",
+          "assignee": "QA",
+          "dependencies": ["7.5"]
+        },
+        {
+          "id": "8.1",
+          "name": "First-Run Detection",
+          "effort_days": 0.5,
+          "priority": "P2",
+          "status": "todo",
+          "assignee": "Dev",
+          "dependencies": []
+        },
+        {
+          "id": "8.2",
+          "name": "Interactive Tutorial Implementation",
+          "effort_days": 2,
+          "priority": "P2",
+          "status": "todo",
+          "assignee": "Dev",
+          "dependencies": ["8.1"]
+        },
+        {
+          "id": "8.3",
+          "name": "Tutorial Testing",
+          "effort_days": 0.5,
+          "priority": "P2",
+          "status": "todo",
+          "assignee": "QA",
+          "dependencies": ["8.2"]
+        },
+        {
+          "id": "9.1",
+          "name": "Profile System Implementation",
+          "effort_days": 2,
+          "priority": "P2",
+          "status": "todo",
+          "assignee": "Dev",
+          "dependencies": []
+        },
+        {
+          "id": "9.2",
+          "name": "Notification System",
+          "effort_days": 1.5,
+          "priority": "P2",
+          "status": "todo",
+          "assignee": "Dev",
+          "dependencies": []
+        },
+        {
+          "id": "9.3",
+          "name": "Phase 3 Testing & Documentation",
+          "effort_days": 1.5,
+          "priority": "P1",
+          "status": "todo",
+          "assignee": "QA/Tech Writer",
+          "dependencies": ["7.6", "8.3", "9.1", "9.2"]
+        }
+      ]
+    },
+    {
+      "id": "phase4",
+      "name": "Advanced Features",
+      "weeks": "12-16",
+      "milestone": "v2.3.0",
+      "tasks": [
+        {
+          "id": "10.1",
+          "name": "Plugin Architecture",
+          "effort_days": 2,
+          "priority": "P3",
+          "status": "todo",
+          "assignee": "Lead Dev",
+          "dependencies": []
+        },
+        {
+          "id": "10.2",
+          "name": "Plugin Commands",
+          "effort_days": 1.5,
+          "priority": "P3",
+          "status": "todo",
+          "assignee": "Dev",
+          "dependencies": ["10.1"]
+        },
+        {
+          "id": "10.3",
+          "name": "Example Plugins",
+          "effort_days": 1,
+          "priority": "P3",
+          "status": "todo",
+          "assignee": "Dev",
+          "dependencies": ["10.2"]
+        },
+        {
+          "id": "11.1",
+          "name": "iCloud Drive Integration",
+          "effort_days": 3,
+          "priority": "P3",
+          "status": "todo",
+          "assignee": "Dev",
+          "dependencies": []
+        },
+        {
+          "id": "11.2",
+          "name": "Cloud Backup Testing",
+          "effort_days": 1,
+          "priority": "P3",
+          "status": "todo",
+          "assignee": "QA",
+          "dependencies": ["11.1"]
+        },
+        {
+          "id": "12.1",
+          "name": "Performance Optimization",
+          "effort_days": 2,
+          "priority": "P1",
+          "status": "todo",
+          "assignee": "Dev",
+          "dependencies": []
+        },
+        {
+          "id": "12.2",
+          "name": "Security Audit",
+          "effort_days": 1,
+          "priority": "P0",
+          "status": "todo",
+          "assignee": "Security/Lead",
+          "dependencies": []
+        },
+        {
+          "id": "12.3",
+          "name": "Final Testing & Bug Fixes",
+          "effort_days": 2,
+          "priority": "P0",
+          "status": "todo",
+          "assignee": "Team",
+          "dependencies": ["12.1", "12.2"]
+        },
+        {
+          "id": "12.4",
+          "name": "Release Preparation",
+          "effort_days": 1,
+          "priority": "P0",
+          "status": "todo",
+          "assignee": "Lead",
+          "dependencies": ["12.3"]
+        }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "id": "f1",
+      "name": "Pre-Cleanup Backup System",
+      "priority": "P0",
+      "phase": "phase1",
+      "status": "todo",
+      "commands": [
+        "mo clean --backup",
+        "mo restore",
+        "mo restore --list",
+        "mo restore --from DATE",
+        "mo backup-clean",
+        "mo backup-config"
+      ]
+    },
+    {
+      "id": "f2",
+      "name": "Enhanced Dry-Run Visualization",
+      "priority": "P1",
+      "phase": "phase1",
+      "status": "todo",
+      "commands": [
+        "mo clean --dry-run",
+        "mo clean --preview",
+        "mo clean --dry-run --tree",
+        "mo clean --dry-run --json"
+      ]
+    },
+    {
+      "id": "f3",
+      "name": "Smart Scheduling System",
+      "priority": "P0",
+      "phase": "phase2",
+      "status": "todo",
+      "commands": [
+        "mo schedule enable",
+        "mo schedule daily",
+        "mo schedule weekly",
+        "mo schedule smart",
+        "mo schedule config",
+        "mo schedule status",
+        "mo schedule disable"
+      ]
+    },
+    {
+      "id": "f4",
+      "name": "Analytics & Insights Engine",
+      "priority": "P1",
+      "phase": "phase2",
+      "status": "todo",
+      "commands": [
+        "mo insights",
+        "mo insights --period 30d",
+        "mo insights --category browser",
+        "mo insights --export json",
+        "mo insights --compare"
+      ]
+    },
+    {
+      "id": "f5",
+      "name": "Profile System",
+      "priority": "P2",
+      "phase": "phase3",
+      "status": "todo",
+      "commands": [
+        "mo profile list",
+        "mo profile use developer",
+        "mo profile create myprofile",
+        "mo profile export",
+        "mo profile import"
+      ]
+    },
+    {
+      "id": "f6",
+      "name": "Web Dashboard",
+      "priority": "P2",
+      "phase": "phase3",
+      "status": "todo",
+      "commands": [
+        "mo dashboard",
+        "mo dashboard --port 8080",
+        "mo dashboard --open",
+        "mo dashboard --stop"
+      ]
+    },
+    {
+      "id": "f7",
+      "name": "Interactive Tutorial",
+      "priority": "P2",
+      "phase": "phase3",
+      "status": "todo",
+      "commands": [
+        "mo tutorial",
+        "mo tutorial --reset"
+      ]
+    },
+    {
+      "id": "f8",
+      "name": "Plugin System",
+      "priority": "P3",
+      "phase": "phase4",
+      "status": "todo",
+      "commands": [
+        "mo plugin list",
+        "mo plugin enable PLUGIN",
+        "mo plugin disable PLUGIN",
+        "mo plugin install URL",
+        "mo plugin remove PLUGIN"
+      ]
+    },
+    {
+      "id": "f9",
+      "name": "Cloud Backup Integration",
+      "priority": "P3",
+      "phase": "phase4",
+      "status": "todo",
+      "commands": [
+        "mo cloud setup",
+        "mo cloud backup",
+        "mo cloud restore",
+        "mo cloud list"
+      ]
+    }
+  ],
+  "kpis": [
+    {
+      "name": "Test Coverage",
+      "unit": "%",
+      "baseline": 45,
+      "target": 80,
+      "values": {
+        "week_4": null,
+        "week_8": null,
+        "week_12": null,
+        "week_16": null
+      }
+    },
+    {
+      "name": "Build Time",
+      "unit": "minutes",
+      "baseline": 5,
+      "target": 15,
+      "values": {
+        "week_4": null,
+        "week_8": null,
+        "week_12": null,
+        "week_16": null
+      }
+    },
+    {
+      "name": "Cleanup Time",
+      "unit": "minutes",
+      "baseline": 3,
+      "target": 5,
+      "values": {
+        "week_4": null,
+        "week_8": null,
+        "week_12": null,
+        "week_16": null
+      }
+    },
+    {
+      "name": "Memory Usage",
+      "unit": "MB",
+      "baseline": 50,
+      "target": 100,
+      "values": {
+        "week_4": null,
+        "week_8": null,
+        "week_12": null,
+        "week_16": null
+      }
+    },
+    {
+      "name": "Beta Users",
+      "unit": "count",
+      "baseline": 0,
+      "target": 50,
+      "values": {
+        "week_4": null,
+        "week_8": null,
+        "week_12": null,
+        "week_16": null
+      }
+    },
+    {
+      "name": "Bug Count",
+      "unit": "count",
+      "baseline": 0,
+      "target": 5,
+      "values": {
+        "week_4": null,
+        "week_8": null,
+        "week_12": null,
+        "week_16": null
+      }
+    }
+  ],
+  "risks": [
+    {
+      "id": "r1",
+      "name": "Backup System Complexity",
+      "probability": "high",
+      "impact": "high",
+      "status": "open",
+      "mitigation": "Start with simple tar.gz approach, extensive testing, gradual rollout"
+    },
+    {
+      "id": "r2",
+      "name": "Smart Scheduling Adoption",
+      "probability": "medium",
+      "impact": "high",
+      "status": "open",
+      "mitigation": "Strong onboarding via tutorial, clear value proposition, easy disable"
+    },
+    {
+      "id": "r3",
+      "name": "Web Dashboard Security",
+      "probability": "medium",
+      "impact": "high",
+      "status": "open",
+      "mitigation": "Localhost-only binding, CSRF protection, security audit"
+    },
+    {
+      "id": "r4",
+      "name": "Timeline Slippage",
+      "probability": "medium",
+      "impact": "medium",
+      "status": "open",
+      "mitigation": "Buffer time in each phase, prioritize ruthlessly, Phase 4 optional"
+    }
+  ],
+  "team": {
+    "lead_developer": {
+      "hours_per_week": 40,
+      "responsibilities": [
+        "Architecture decisions",
+        "Code reviews",
+        "Complex features",
+        "Security audit"
+      ]
+    },
+    "full_stack_developer": {
+      "hours_per_week": 40,
+      "responsibilities": [
+        "Web dashboard",
+        "API development",
+        "UI/UX implementation"
+      ]
+    },
+    "backend_developer": {
+      "hours_per_week": 30,
+      "responsibilities": [
+        "Core features",
+        "Database work",
+        "Plugin system",
+        "Testing"
+      ]
+    },
+    "qa_engineer": {
+      "hours_per_week": 20,
+      "responsibilities": [
+        "Test planning",
+        "Test execution",
+        "Bug tracking",
+        "UAT"
+      ]
+    },
+    "tech_writer": {
+      "hours_per_week": 10,
+      "responsibilities": [
+        "Documentation",
+        "Release notes",
+        "Tutorials",
+        "User guides"
+      ]
+    }
+  },
+  "meta": {
+    "created_date": "2025-10-06",
+    "version": "1.0",
+    "last_updated": "2025-10-06",
+    "format_version": "1.0"
+  }
+}

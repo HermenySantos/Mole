@@ -339,7 +339,7 @@ generate_checksum() {
     elif command -v shasum &>/dev/null; then
         (cd "$backup_path" && shasum -a 256 backup.tar.gz > checksum.sha256)
     else
-        log_warn "No checksum tool available, skipping checksum generation"
+        log_warninging "No checksum tool available, skipping checksum generation"
         return 1
     fi
     
@@ -355,7 +355,7 @@ verify_checksum() {
     local checksum_file="${backup_path}/checksum.sha256"
     
     if [[ ! -f "$checksum_file" ]]; then
-        log_warn "No checksum file found"
+        log_warning "No checksum file found"
         return 1
     fi
     
@@ -366,7 +366,7 @@ verify_checksum() {
     elif command -v shasum &>/dev/null; then
         (cd "$backup_path" && shasum -a 256 -c checksum.sha256 &>/dev/null)
     else
-        log_warn "No checksum tool available, skipping verification"
+        log_warning "No checksum tool available, skipping verification"
         return 1
     fi
     
@@ -377,7 +377,7 @@ verify_checksum() {
         return 0
     else
         log_error "Checksum verification failed"
-        log_warn "Backup may be corrupted"
+        log_warning "Backup may be corrupted"
         return 1
     fi
 }
@@ -407,7 +407,7 @@ create_backup() {
     
     # Check if there are files to backup
     if [[ ${#files_to_backup[@]} -eq 0 ]]; then
-        log_warn "No files to backup"
+        log_warning "No files to backup"
         remove_backup_lock
         return 0
     fi
@@ -465,12 +465,12 @@ create_backup() {
     
     # Generate checksum
     generate_checksum "$backup_path" || {
-        log_warn "Checksum generation failed, but backup is complete"
+        log_warning "Checksum generation failed, but backup is complete"
     }
     
     # Verify backup
     verify_checksum "$backup_path" || {
-        log_warn "Backup verification failed"
+        log_warning "Backup verification failed"
         echo ""
         read -p "Continue anyway? (y/N): " -n 1 -r
         echo ""
@@ -596,8 +596,8 @@ restore_backup() {
     
     # Confirm restore
     echo ""
-    log_warn "This will restore files from backup: $backup_id"
-    log_warn "Existing files may be overwritten"
+    log_warning "This will restore files from backup: $backup_id"
+    log_warning "Existing files may be overwritten"
     echo ""
     read -p "Continue with restore? (y/N): " -n 1 -r
     echo ""

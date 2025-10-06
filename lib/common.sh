@@ -14,6 +14,7 @@ readonly MOLE_COMMON_LOADED=1
 readonly ESC=$'\033'
 readonly GREEN="${ESC}[0;32m"
 readonly BLUE="${ESC}[0;34m"
+readonly CYAN="${ESC}[0;36m"
 readonly YELLOW="${ESC}[1;33m"
 readonly PURPLE="${ESC}[0;35m"
 readonly RED="${ESC}[0;31m"
@@ -58,6 +59,15 @@ log_header() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] SECTION: $1" >> "$LOG_FILE" 2>/dev/null || true
 }
 
+log_debug() {
+    rotate_log
+    # Only log to file in debug mode (don't print to console)
+    if [[ "${DEBUG:-false}" == "true" ]]; then
+        echo -e "${GRAY}[DEBUG] $1${NC}"
+    fi
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] DEBUG: $1" >> "$LOG_FILE" 2>/dev/null || true
+}
+
 # Log file maintenance
 rotate_log() {
     local max_size="${MOLE_MAX_LOG_SIZE:-$LOG_MAX_SIZE_DEFAULT}"
@@ -78,6 +88,19 @@ detect_architecture() {
 
 get_free_space() {
     df -h / | awk 'NR==2 {print $4}'
+}
+
+get_free_space_bytes() {
+    # Get free space in 512-byte blocks and convert to bytes
+    local blocks
+    blocks=$(df / | awk 'NR==2 {print $4}')
+    
+    if [[ -z "$blocks" ]] || [[ ! "$blocks" =~ ^[0-9]+$ ]]; then
+        echo "0"
+        return 1
+    fi
+    
+    echo $((blocks * 512))
 }
 
 # Common UI functions
@@ -228,14 +251,14 @@ bytes_to_human() {
     fi
 }
 
-# Calculate directory size in bytes
+# Calculate directory or file size in bytes
 get_directory_size_bytes() {
     local path="$1"
-    if [[ ! -d "$path" ]]; then
+    if [[ ! -e "$path" ]]; then
         echo "0"
         return 1
     fi
-    du -sk "$path" 2>/dev/null | cut -f1 | awk '{print $1 * 1024}' || echo "0"
+    du -sk "$path" 2>/dev/null | awk '{print $1 * 1024}' || echo "0"
 }
 
 

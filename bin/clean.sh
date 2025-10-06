@@ -7,10 +7,12 @@ set -euo pipefail
 # Get script directory and source common functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../lib/common.sh"
+source "$SCRIPT_DIR/../lib/backup.sh"
 
 # Configuration
 SYSTEM_CLEAN=false
 DRY_RUN=false
+BACKUP_MODE=false
 IS_M_SERIES=$([ "$(uname -m)" = "arm64" ] && echo "true" || echo "false")
 # Default whitelist patterns to avoid removing critical caches (can be extended by user)
 WHITELIST_PATTERNS=(
@@ -36,6 +38,9 @@ LAST_CLEAN_RESULT=0
 files_cleaned=0
 total_size_cleaned=0
 SUDO_KEEPALIVE_PID=""
+
+# Backup tracking
+declare -a FILES_TO_BACKUP
 
 note_activity() {
     if [[ $TRACK_SECTION -eq 1 ]]; then
@@ -152,6 +157,13 @@ safe_clean() {
     if [[ ${#existing_paths[@]} -eq 0 ]]; then
         LAST_CLEAN_RESULT=0
         return 0
+    fi
+    
+    # Collect files for backup if backup mode is enabled
+    if [[ "$BACKUP_MODE" == "true" ]]; then
+        for path in "${existing_paths[@]}"; do
+            FILES_TO_BACKUP+=("$path")
+        done
     fi
 
     # Show progress indicator for potentially slow operations
@@ -1233,6 +1245,9 @@ main() {
             "--dry-run"|"-n")
                 DRY_RUN=true
                 ;;
+            "--backup"|"-b")
+                BACKUP_MODE=true
+                ;;
             "--whitelist")
                 source "$SCRIPT_DIR/../lib/whitelist_manager.sh"
                 manage_whitelist
@@ -1245,6 +1260,7 @@ main() {
                 echo "Options:"
                 echo "  --help, -h        Show this help"
                 echo "  --dry-run, -n     Preview what would be cleaned without deleting"
+                echo "  --backup, -b      Create backup before cleaning (recommended)"
                 echo "  --whitelist       Manage protected caches"
                 echo ""
                 echo "Interactive cleanup with smart password handling"
@@ -1256,6 +1272,36 @@ main() {
 
     hide_cursor
     start_cleanup
+    
+    # If backup mode is enabled, collect files first with a dry-run-like pass
+    if [[ "$BACKUP_MODE" == "true" && "$DRY_RUN" != "true" ]]; then
+        log_info "Backup mode enabled - analyzing files..."
+        
+        # First pass: collect files without cleaning
+        local original_dry_run="$DRY_RUN"
+        DRY_RUN=true
+        perform_cleanup > /dev/null 2>&1
+        DRY_RUN="$original_dry_run"
+        
+        # Create backup if we have files
+        if [[ ${#FILES_TO_BACKUP[@]} -gt 0 ]]; then
+            echo ""
+            log_info "Creating backup of ${#FILES_TO_BACKUP[@]} items before cleanup..."
+            create_backup "${FILES_TO_BACKUP[@]}" || {
+                log_error "Backup failed! Cleanup aborted for safety."
+                show_cursor
+                exit 1
+            }
+            echo ""
+            
+            # Clear the array for the actual cleanup
+            FILES_TO_BACKUP=()
+        else
+            log_info "No files to backup"
+        fi
+    fi
+    
+    # Perform the actual cleanup
     perform_cleanup
     show_cursor
 }
